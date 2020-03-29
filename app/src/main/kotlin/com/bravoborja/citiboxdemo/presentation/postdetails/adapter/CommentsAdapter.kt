@@ -5,11 +5,11 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.bravoborja.citiboxdemo.data.local.model.CommentEntity
 import com.bravoborja.citiboxdemo.databinding.ItemCommentBinding
+import com.bravoborja.citiboxdemo.domain.model.CommentModel
 
 class CommentsAdapter :
-    ListAdapter<CommentEntity, CommentsAdapter.CommentViewHolder>(DIFF_CALLBACK) {
+    ListAdapter<CommentModel, CommentsAdapter.CommentViewHolder>(DIFF_CALLBACK) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = CommentViewHolder(
         ItemCommentBinding.inflate(
@@ -23,13 +23,13 @@ class CommentsAdapter :
         holder.bind(getItem(position))
 
     companion object {
-        private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<CommentEntity>() {
-            override fun areItemsTheSame(oldItem: CommentEntity, newItem: CommentEntity): Boolean =
+        private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<CommentModel>() {
+            override fun areItemsTheSame(oldItem: CommentModel, newItem: CommentModel): Boolean =
                 oldItem.id == newItem.id
 
             override fun areContentsTheSame(
-                oldItem: CommentEntity,
-                newItem: CommentEntity
+                oldItem: CommentModel,
+                newItem: CommentModel
             ): Boolean =
                 oldItem == newItem
         }
@@ -38,7 +38,7 @@ class CommentsAdapter :
     inner class CommentViewHolder(private val binding: ItemCommentBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(comment: CommentEntity) {
+        fun bind(comment: CommentModel) {
             binding.commentTitle.text = comment.name
             binding.commentAuthorEmail.text = comment.email
             binding.commentDescription.text = comment.body

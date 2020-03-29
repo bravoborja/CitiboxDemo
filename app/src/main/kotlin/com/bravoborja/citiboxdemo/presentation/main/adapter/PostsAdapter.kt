@@ -6,12 +6,12 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import coil.api.load
-import com.bravoborja.citiboxdemo.data.local.model.PostEntity
 import com.bravoborja.citiboxdemo.databinding.ItemPostBinding
+import com.bravoborja.citiboxdemo.domain.model.PostModel
 
-class PostsAdapter : ListAdapter<PostEntity, PostsAdapter.PostViewHolder>(DIFF_CALLBACK) {
+class PostsAdapter : ListAdapter<PostModel, PostsAdapter.PostViewHolder>(DIFF_CALLBACK) {
 
-    var onClickPost: ((PostEntity) -> Unit)? = null
+    var onClickPost: ((PostModel) -> Unit)? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = PostViewHolder(
         ItemPostBinding.inflate(
@@ -25,11 +25,11 @@ class PostsAdapter : ListAdapter<PostEntity, PostsAdapter.PostViewHolder>(DIFF_C
         holder.bind(getItem(position))
 
     companion object {
-        private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<PostEntity>() {
-            override fun areItemsTheSame(oldItem: PostEntity, newItem: PostEntity): Boolean =
+        private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<PostModel>() {
+            override fun areItemsTheSame(oldItem: PostModel, newItem: PostModel): Boolean =
                 oldItem.id == newItem.id
 
-            override fun areContentsTheSame(oldItem: PostEntity, newItem: PostEntity): Boolean =
+            override fun areContentsTheSame(oldItem: PostModel, newItem: PostModel): Boolean =
                 oldItem == newItem
         }
     }
@@ -37,7 +37,7 @@ class PostsAdapter : ListAdapter<PostEntity, PostsAdapter.PostViewHolder>(DIFF_C
     inner class PostViewHolder(private val binding: ItemPostBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(post: PostEntity) {
+        fun bind(post: PostModel) {
             binding.postTitle.text = post.title
             binding.imageView.load(post.imageUrl)
             binding.root.setOnClickListener {

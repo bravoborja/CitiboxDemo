@@ -18,6 +18,6 @@ interface ApiService {
     @GET("users")
     suspend fun getUsers(): Response<List<User>>
 
-    @GET("posts/{id}/comments")
-    suspend fun getComments(@Path("id") id: Long): Response<List<Comment>>
+    @GET("comments")
+    suspend fun getComments(): Response<List<Comment>>
 }

@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.bravoborja.citiboxdemo.common.State
-import com.bravoborja.citiboxdemo.data.local.model.CommentEntity
+import com.bravoborja.citiboxdemo.domain.model.CommentModel
 import com.bravoborja.citiboxdemo.domain.usecase.GetAuthorUseCase
 import com.bravoborja.citiboxdemo.domain.usecase.GetCommentsUseCase
 import com.bravoborja.citiboxdemo.domain.usecase.GetPostUseCase
@@ -21,9 +21,9 @@ class PostDetailsViewModel @Inject constructor(
     private val getCommentsUseCase: GetCommentsUseCase
 ) : ViewModel() {
 
-    private val _commentsLiveData = MutableLiveData<State<List<CommentEntity>>>()
+    private val _commentsLiveData = MutableLiveData<State<List<CommentModel>>>()
 
-    val commentsLiveData: LiveData<State<List<CommentEntity>>>
+    val commentsLiveData: LiveData<State<List<CommentModel>>>
         get() = _commentsLiveData
 
     fun getComments(postId: Long) {
