@@ -10,7 +10,7 @@ import com.bravoborja.citiboxdemo.databinding.ItemPostBinding
 
 class PostsAdapter : ListAdapter<PostEntity, PostsAdapter.PostViewHolder>(DIFF_CALLBACK) {
 
-    val onClickPost: ((PostEntity) -> Unit)? = null
+    var onClickPost: ((PostEntity) -> Unit)? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = PostViewHolder(
         ItemPostBinding.inflate(

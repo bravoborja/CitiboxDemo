@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">CitiboxDemo</string>
+    <string name="comment_title">Title:</string>
+    <string name="comment_author_email">Author:</string>
+    <string name="comment_description">Description:</string>
+    <string name="post_author_name">Author name:</string>
+    <string name="post_description">Description:</string>
+    <string name="post_number_of_comments">Number of comments:</string>
 </resources>

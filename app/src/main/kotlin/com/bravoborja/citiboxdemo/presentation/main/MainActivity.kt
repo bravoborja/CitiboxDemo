@@ -1,5 +1,6 @@
 package com.bravoborja.citiboxdemo.presentation.main
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.lifecycle.Observer
@@ -7,7 +8,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.bravoborja.citiboxdemo.common.State
 import com.bravoborja.citiboxdemo.databinding.ActivityMainBinding
 import com.bravoborja.citiboxdemo.presentation.common.BaseActivity
+import com.bravoborja.citiboxdemo.presentation.common.NetworkHelper
 import com.bravoborja.citiboxdemo.presentation.main.adapter.PostsAdapter
+import com.bravoborja.citiboxdemo.presentation.postdetails.PostDetailsActivity
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 @ExperimentalCoroutinesApi
@@ -20,6 +23,12 @@ class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding>() {
         setContentView(viewBinding.root)
         viewBinding.postsRecyclerView.layoutManager = LinearLayoutManager(this@MainActivity)
         viewBinding.postsRecyclerView.adapter = adapter
+        (viewBinding.postsRecyclerView.adapter as PostsAdapter).onClickPost = {
+            val intent = Intent(this, PostDetailsActivity::class.java)
+            intent.putExtra(PostDetailsActivity.EXTRA_POST_ID, it.id)
+            intent.putExtra(PostDetailsActivity.EXTRA_USER_ID, it.userId)
+            startActivity(intent)
+        }
         initPosts()
     }
 
@@ -43,6 +52,11 @@ class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding>() {
         if (viewModel.postsLiveData.value !is State.Success) {
             getPosts()
         }
+        NetworkHelper.getNetworkLiveData(this).observe(this, Observer { isConnected ->
+            if (isConnected && viewModel.postsLiveData.value is State.Error || adapter.itemCount == 0) {
+                getPosts()
+            }
+        })
     }
 
     private fun getPosts() = viewModel.getPosts()

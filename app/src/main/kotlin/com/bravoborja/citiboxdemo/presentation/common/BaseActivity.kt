@@ -28,5 +28,4 @@ abstract class BaseActivity<VM : ViewModel, VB : ViewBinding> : DaggerAppCompatA
 
     inline fun <reified VM : ViewModel> AppCompatActivity.viewModelOf(factory: ViewModelProvider.Factory) =
         ViewModelProvider(this, factory).get(VM::class.java)
-
 }

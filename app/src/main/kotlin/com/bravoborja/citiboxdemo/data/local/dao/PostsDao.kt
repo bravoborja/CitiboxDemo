@@ -13,6 +13,9 @@ interface PostsDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertPosts(posts: List<PostEntity>)
 
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insertPost(post: PostEntity)
+
     @Query("SELECT * FROM ${PostEntity.POSTS_TABLE_NAME} WHERE ID = :postId")
     fun getPostById(postId: Long): Flow<PostEntity>
 

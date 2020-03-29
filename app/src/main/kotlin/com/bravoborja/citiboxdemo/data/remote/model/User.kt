@@ -1,4 +1,9 @@
 package com.bravoborja.citiboxdemo.data.remote.model
 
-class User {
-}
+data class User(
+    val id: Long,
+    val postId: Long,
+    val name: String,
+    val username: String,
+    val email: String
+)

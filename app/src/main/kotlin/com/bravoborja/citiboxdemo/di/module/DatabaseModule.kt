@@ -16,4 +16,12 @@ class DatabaseModule {
     @Singleton
     @Provides
     fun providePostsDao(database: PostsDatabase) = database.getPostsDao()
+
+    @Singleton
+    @Provides
+    fun provideCommentsDao(database: PostsDatabase) = database.getCommentsDao()
+
+    @Singleton
+    @Provides
+    fun provideUsersDao(database: PostsDatabase) = database.getUsersDao()
 }
