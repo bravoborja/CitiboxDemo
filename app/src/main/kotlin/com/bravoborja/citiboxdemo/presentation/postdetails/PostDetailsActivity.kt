@@ -8,6 +8,7 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bravoborja.citiboxdemo.common.State
 import com.bravoborja.citiboxdemo.databinding.ActivityPostDetailsBinding
+import com.bravoborja.citiboxdemo.domain.model.PostModel
 import com.bravoborja.citiboxdemo.presentation.common.BaseActivity
 import com.bravoborja.citiboxdemo.presentation.postdetails.adapter.CommentsAdapter
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -16,8 +17,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 class PostDetailsActivity : BaseActivity<PostDetailsViewModel, ActivityPostDetailsBinding>() {
 
     companion object {
-        const val EXTRA_POST_ID = "EXTRA_POST_ID"
-        const val EXTRA_USER_ID = "EXTRA_USER_ID"
+        const val EXTRA_POST = "EXTRA_POST"
     }
 
     private val adapter: CommentsAdapter by lazy { CommentsAdapter() }
@@ -25,19 +25,34 @@ class PostDetailsActivity : BaseActivity<PostDetailsViewModel, ActivityPostDetai
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(viewBinding.root)
-        val postId = intent.extras?.getLong(EXTRA_POST_ID) ?: 0
-        val userId = intent.extras?.getLong(EXTRA_USER_ID) ?: 0
+        val post = intent.extras?.getParcelable<PostModel>(EXTRA_POST)
         viewBinding.commentsRecyclerView.layoutManager =
             LinearLayoutManager(this@PostDetailsActivity)
         viewBinding.commentsRecyclerView.adapter = adapter
-        initPost(postId, userId)
+        initPost(post)
     }
 
-    private fun initPost(postId: Long, userId: Long) {
+    private fun initPost(post: PostModel?) {
+        viewBinding.postDescription.text = post?.body
+        viewModel.authorLiveData.observe(this, Observer { state ->
+            when (state) {
+                is State.Loading -> {
+                    Log.d("PostDetailsActivity", "" + "loading author")
+                }
+                is State.Success -> {
+                    viewBinding.postAuthor.text = state.data?.name
+                    getComments(post?.id)
+                }
+                is State.Error -> {
+                    Toast.makeText(applicationContext, state.message, Toast.LENGTH_SHORT).show()
+                }
+            }
+        })
+
         viewModel.commentsLiveData.observe(this, Observer { state ->
             when (state) {
                 is State.Loading -> {
-                    Log.d("PostDetailsActivity", "" + "loading")
+                    Log.d("PostDetailsActivity", "" + "loading comments")
                 }
                 is State.Success -> {
                     viewBinding.commentsLayout.visibility = View.VISIBLE
@@ -50,12 +65,14 @@ class PostDetailsActivity : BaseActivity<PostDetailsViewModel, ActivityPostDetai
                 }
             }
         })
-        if (viewModel.commentsLiveData.value !is State.Success) {
-            getComments(postId)
+        if (viewModel.authorLiveData.value !is State.Success) {
+            getAuthor(post?.userId)
         }
     }
 
-    private fun getComments(postId: Long) = viewModel.getComments(postId)
+    private fun getAuthor(userId: Long?) = viewModel.getAuthor(userId)
+
+    private fun getComments(postId: Long?) = viewModel.getComments(postId)
 
     override fun createViewBinding(): ActivityPostDetailsBinding =
         ActivityPostDetailsBinding.inflate(layoutInflater)
