@@ -10,7 +10,8 @@ data class PostEntity(
     var id: Long? = 0,
     var userId: Long? = 0,
     var title: String? = null,
-    var body: String? = null
+    var body: String? = null,
+    var imageUrl: String? = null
 ) {
     companion object {
         const val POSTS_TABLE_NAME = "posts"

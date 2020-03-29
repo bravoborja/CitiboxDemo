@@ -5,6 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import coil.api.load
 import com.bravoborja.citiboxdemo.data.local.model.PostEntity
 import com.bravoborja.citiboxdemo.databinding.ItemPostBinding
 
@@ -38,6 +39,7 @@ class PostsAdapter : ListAdapter<PostEntity, PostsAdapter.PostViewHolder>(DIFF_C
 
         fun bind(post: PostEntity) {
             binding.postTitle.text = post.title
+            binding.imageView.load(post.imageUrl)
             binding.root.setOnClickListener {
                 onClickPost?.invoke(post)
             }

@@ -1,5 +1,6 @@
 package com.bravoborja.citiboxdemo.data.repository
 
+import com.bravoborja.citiboxdemo.BuildConfig
 import com.bravoborja.citiboxdemo.common.State
 import com.bravoborja.citiboxdemo.data.local.dao.PostsDao
 import com.bravoborja.citiboxdemo.data.local.model.PostEntity
@@ -24,8 +25,17 @@ class PostsDataRepository @Inject constructor(
     override fun getPosts(): Flow<State<List<PostEntity>>> {
         return object : NetworkBoundRepository<List<PostEntity>, List<Post>>() {
 
-            override suspend fun saveRemoteData(data: List<Post>) =
-                postsDao.insertPosts(data.map { PostEntity(it.id, it.userId, it.title, it.body) })
+            override suspend fun saveRemoteData(data: List<Post>) {
+                postsDao.insertPosts(data.map {
+                    PostEntity(
+                        it.id,
+                        it.userId,
+                        it.title,
+                        it.body,
+                        getImageUrl()
+                    )
+                })
+            }
 
             override fun fetchFromLocal(): Flow<List<PostEntity>> = postsDao.getPosts()
 
@@ -37,8 +47,17 @@ class PostsDataRepository @Inject constructor(
     override fun getPost(postId: Long): Flow<State<PostEntity>> {
         return object : NetworkBoundRepository<PostEntity, Post>() {
 
-            override suspend fun saveRemoteData(data: Post) =
-                postsDao.insertPost(PostEntity(data.id, data.userId, data.title, data.body))
+            override suspend fun saveRemoteData(data: Post) {
+                postsDao.insertPost(
+                    PostEntity(
+                        data.id,
+                        data.userId,
+                        data.title,
+                        data.body,
+                        getImageUrl()
+                    )
+                )
+            }
 
             override fun fetchFromLocal(): Flow<PostEntity> = postsDao.getPostById(postId)
 
@@ -46,4 +65,8 @@ class PostsDataRepository @Inject constructor(
 
         }.asFlow().flowOn(Dispatchers.IO)
     }
+
+    private fun getImageUrl() = BuildConfig.RANDOM_IMAGE_URL + getRandom()
+
+    private fun getRandom() = (0..300).random()
 }

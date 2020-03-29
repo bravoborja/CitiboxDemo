@@ -22,7 +22,7 @@ abstract class NetworkBoundRepository<LocalData, RemoteData> {
                 emit(State.error(apiResponse.message()))
             }
         } catch (e: Exception) {
-            emit(State.error("Unknown error. Try again"))
+            emit(State.error("Network error"))
         }
         emitAll(fetchFromLocal().map { State.success(it) })
     }
