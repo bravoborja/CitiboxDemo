@@ -64,33 +64,6 @@ class PostsDataRepository @Inject constructor(
         }.asFlow().flowOn(Dispatchers.IO)
     }
 
-    override fun getPost(postId: Long): Flow<State<PostModel>> {
-        return object : NetworkBoundRepository<PostModel, Post>() {
-
-            override suspend fun saveRemoteData(data: Post) {
-                postsDao.insertPost(
-                    PostEntity(
-                        data.id,
-                        data.userId,
-                        data.title,
-                        data.body,
-                        getImageUrl()
-                    )
-                )
-            }
-
-            override fun fetchFromLocal(): Flow<PostModel> {
-                val transform: suspend (value: PostEntity) -> Flow<PostModel> = {
-                    flowOf(PostModel(it.id, it.userId, it.title, it.body, it.imageUrl))
-                }
-                return postsDao.getPostById(postId).flatMapConcat(transform).asLiveData().asFlow()
-            }
-
-            override suspend fun fetchFromRemote(): Response<Post> = apiService.getPost(postId)
-
-        }.asFlow().flowOn(Dispatchers.IO)
-    }
-
     private fun getImageUrl() = BuildConfig.RANDOM_IMAGE_URL + getRandom()
 
     private fun getRandom() = (0..300).random()

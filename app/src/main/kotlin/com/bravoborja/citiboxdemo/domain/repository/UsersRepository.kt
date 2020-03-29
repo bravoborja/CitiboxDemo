@@ -5,5 +5,5 @@ import com.bravoborja.citiboxdemo.domain.model.UserModel
 import kotlinx.coroutines.flow.Flow
 
 interface UsersRepository {
-    fun getAuthor(userId: Long): Flow<State<UserModel>>
+    fun getAuthor(userId: Long): Flow<State<UserModel?>>
 }

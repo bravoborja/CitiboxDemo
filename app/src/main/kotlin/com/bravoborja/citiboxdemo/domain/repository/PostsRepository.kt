@@ -6,6 +6,4 @@ import kotlinx.coroutines.flow.Flow
 
 interface PostsRepository {
     fun getPosts(): Flow<State<List<PostModel>>>
-
-    fun getPost(postId: Long): Flow<State<PostModel>>
 }

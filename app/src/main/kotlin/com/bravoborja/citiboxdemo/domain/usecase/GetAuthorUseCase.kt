@@ -10,7 +10,7 @@ import javax.inject.Inject
 @ExperimentalCoroutinesApi
 class GetAuthorUseCase @Inject constructor(private val repository: UsersRepository) {
 
-    fun getAuthor(userId: Long): Flow<State<UserModel>> {
+    fun getAuthor(userId: Long): Flow<State<UserModel?>> {
         return repository.getAuthor(userId)
     }
 }

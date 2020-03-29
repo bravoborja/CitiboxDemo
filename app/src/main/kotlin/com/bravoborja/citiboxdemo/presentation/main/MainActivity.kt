@@ -2,6 +2,7 @@ package com.bravoborja.citiboxdemo.presentation.main
 
 import android.content.Intent
 import android.os.Bundle
+import android.os.Parcelable
 import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -25,8 +26,7 @@ class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding>() {
         viewBinding.postsRecyclerView.adapter = adapter
         (viewBinding.postsRecyclerView.adapter as PostsAdapter).onClickPost = {
             val intent = Intent(this, PostDetailsActivity::class.java)
-            intent.putExtra(PostDetailsActivity.EXTRA_POST_ID, it.id)
-            intent.putExtra(PostDetailsActivity.EXTRA_USER_ID, it.userId)
+            intent.putExtra(PostDetailsActivity.EXTRA_POST, it as Parcelable)
             startActivity(intent)
         }
         initPosts()

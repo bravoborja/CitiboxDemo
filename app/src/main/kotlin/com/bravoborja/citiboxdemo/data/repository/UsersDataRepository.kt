@@ -26,8 +26,8 @@ class UsersDataRepository @Inject constructor(
     private val apiService: ApiService
 ) : UsersRepository {
 
-    override fun getAuthor(userId: Long): Flow<State<UserModel>> {
-        return object : NetworkBoundRepository<UserModel, List<User>>() {
+    override fun getAuthor(userId: Long): Flow<State<UserModel?>> {
+        return object : NetworkBoundRepository<UserModel?, List<User>>() {
 
             override suspend fun saveRemoteData(data: List<User>) =
                 usersDao.insertUsers(data.map {
@@ -39,9 +39,9 @@ class UsersDataRepository @Inject constructor(
                     )
                 })
 
-            override fun fetchFromLocal(): Flow<UserModel> {
-                val transform: suspend (value: UserEntity) -> Flow<UserModel> = {
-                    flowOf(UserModel(it.id, it.name, it.username, it.email))
+            override fun fetchFromLocal(): Flow<UserModel?> {
+                val transform: suspend (value: UserEntity?) -> Flow<UserModel?> = {
+                    flowOf(UserModel(it?.id, it?.name, it?.username, it?.email))
                 }
                 return usersDao.getAuthor(userId).flatMapConcat(transform).asLiveData().asFlow()
             }
