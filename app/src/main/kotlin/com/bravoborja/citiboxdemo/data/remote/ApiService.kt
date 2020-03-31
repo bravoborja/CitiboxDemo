@@ -12,9 +12,6 @@ interface ApiService {
     @GET("posts")
     suspend fun getPosts(): Response<List<Post>>
 
-    @GET("posts/{id}")
-    suspend fun getPost(@Path("id") id: Long): Response<Post>
-
     @GET("users")
     suspend fun getUsers(): Response<List<User>>
 
