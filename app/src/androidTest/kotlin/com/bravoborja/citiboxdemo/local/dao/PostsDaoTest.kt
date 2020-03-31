@@ -43,12 +43,69 @@ class PostsDaoTest {
 
     @Test
     @Throws(Exception::class)
-    fun insertAndGetPosts() {
+    fun insertOnePostAndGetPosts() {
         runBlocking {
-            val post = PostEntity()
+            val post = PostEntity(1L, 1L, "prueba", "body")
             postsDao.insertPost(post)
             postsDao.getPosts().take(1).collect {
                 assertEquals(it.size, 1)
+                assertEquals(it[0].id, 1L)
+                assertEquals(it[0].userId, 1L)
+                assertEquals(it[0].title, "prueba")
+                assertEquals(it[0].body, "body")
+            }
+        }
+    }
+
+    @Test
+    @Throws(Exception::class)
+    fun insertOnePostAndGetPost() {
+        runBlocking {
+            val post = PostEntity(1L, 1L, "prueba", "body")
+            postsDao.insertPost(post)
+            postsDao.getPostById(1L).take(1).collect {
+                assertEquals(it.id, 1L)
+                assertEquals(it.userId, 1L)
+                assertEquals(it.title, "prueba")
+                assertEquals(it.body, "body")
+            }
+        }
+    }
+
+
+    @Test
+    @Throws(Exception::class)
+    fun insertMultiplePostsAndGetPosts() {
+        runBlocking {
+            val posts = listOf(
+                PostEntity(1L, 1L, "prueba", "body"),
+                PostEntity(2L, 1L, "prueba2", "body2")
+            )
+            postsDao.insertPosts(posts)
+            postsDao.getPosts().take(1).collect {
+                assertEquals(it.size, 2)
+                assertEquals(it[1].id, 2L)
+                assertEquals(it[1].userId, 1L)
+                assertEquals(it[1].title, "prueba2")
+                assertEquals(it[1].body, "body2")
+            }
+        }
+    }
+
+    @Test
+    @Throws(Exception::class)
+    fun insertMultiplePostsAndGetPost() {
+        runBlocking {
+            val posts = listOf(
+                PostEntity(1L, 1L, "prueba", "body"),
+                PostEntity(2L, 1L, "prueba2", "body2")
+            )
+            postsDao.insertPosts(posts)
+            postsDao.getPostById(1L).take(1).collect {
+                assertEquals(it.id, 1L)
+                assertEquals(it.userId, 1L)
+                assertEquals(it.title, "prueba")
+                assertEquals(it.body, "body")
             }
         }
     }

@@ -52,6 +52,8 @@ class CommentsDaoTest {
             commentsDao.insertComments(comments)
             commentsDao.getComments(1).take(1).collect {
                 assertEquals(it.size, 2)
+                assertEquals(it[0].name, "pepe")
+                assertEquals(it[1].name, "juan")
             }
         }
     }
